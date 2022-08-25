@@ -1,0 +1,3 @@
+https://htmlcheatsheet.com/js/ - Cheat sheet
+https://javascript.info/ - Bigger cheat sheet
+https://dribbble.com/ - Get ideas for how a site should look
