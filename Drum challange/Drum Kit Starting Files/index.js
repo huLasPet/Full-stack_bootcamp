@@ -65,8 +65,9 @@ function playSound(pressed) {
 }
 
 function buttonAnimation(target) {
-  document.querySelector("." + target).classList.toggle("pressed");
+  activeButton = document.querySelector("." + target);
+  activeButton.classList.add("pressed");
   setTimeout(function () {
-    document.querySelector("." + target).classList.toggle("pressed");
-  }, 100);
+    activeButton.classList.remove("pressed");
+  }, 50);
 }
