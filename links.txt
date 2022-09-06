@@ -3,3 +3,4 @@ https://javascript.info/ - Bigger cheat sheet
 https://dribbble.com/ - Get ideas for how a site should look
 https://coolors.co/palettes/trending - CSS color theme palettes
 https://www.canva.com/ - Create a design
+https://developers.google.com/speed/libraries#jquery - Google library CDN
