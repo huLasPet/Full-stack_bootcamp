@@ -33,7 +33,7 @@ function flashButton(colour) {
 function checkAnswer() {
   //If the length of userclick and gamepattern is the same, check if the 2 arrays are the same
   //If yes, raise level and show another button
-  //If not, reset after a button press
+  //If not, reset and restart after a button press
   if (userClickedPattern.length == gamePattern.length) {
     for (i = 0; i <= level; i++) {
       if (gamePattern[i] == userClickedPattern[i]) {
@@ -41,11 +41,11 @@ function checkAnswer() {
       } else {
         correctSequence = false;
         $("h1").text("Game Over, Press Any Key to Restart");
-        playSound("wrong");
         $("body").addClass("game-over");
         setTimeout(function () {
           $("body").removeClass("game-over");
         }, 200);
+        playSound("wrong");
         level = 0;
         gamePattern = [];
         userClickedPattern = [];
