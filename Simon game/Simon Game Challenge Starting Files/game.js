@@ -31,13 +31,25 @@ function flashButton(colour) {
 }
 
 function checkAnswer() {
+  //If the length of userclick and gamepattern is the same, check if the 2 arrays are the same
+  //If yes, raise level and show another button
+  //If not, reset after a button press
   if (userClickedPattern.length == gamePattern.length) {
     for (i = 0; i <= level; i++) {
       if (gamePattern[i] == userClickedPattern[i]) {
         correctSequence = true;
       } else {
         correctSequence = false;
-        $("h1").text("Nope");
+        $("h1").text("Game Over, Press Any Key to Restart");
+        playSound("wrong");
+        $("body").addClass("game-over");
+        setTimeout(function () {
+          $("body").removeClass("game-over");
+        }, 200);
+        level = 0;
+        gamePattern = [];
+        userClickedPattern = [];
+        $(document).one("keypress", buttonToPress);
       }
     }
     if (correctSequence == true) {
