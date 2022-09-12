@@ -1,0 +1,11 @@
+1.Make a new project folder called
+2.Change Directory to this new folder
+3.Inside the project folder, create a new file called server.js, index.html, index.js
+4.Set up a new NPM package
+5.Using NPM install the express module
+6.Require express in your server.js
+7.Setup express
+8.Create a root route get method with app.get()
+9.Spin up our server on port 3000 with app.listen
+10.Inclue jQuery link (google) and index.js in index.html
+11.Run server with nodemon
