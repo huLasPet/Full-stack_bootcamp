@@ -10,5 +10,21 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js" defer></script>
     <script src="index.js" defer></script>
   </head>
-  <body></body>
+  <body>
+    <form action="/city" method="POST">
+      <label for="city">Type in a city</label>
+      <input type="text" name="city" />
+      <br />
+      <label for="metric">Metric or Imperial</label>
+      <input list="metricOrNot" name="metric" id="metric" />
+
+      <datalist id="metricOrNot">
+        <option value="Imperial"></option>
+        <option value="Metric"></option>
+      </datalist>
+
+      <br />
+      <button type="submit">Submit</button>
+    </form>
+  </body>
 </html>
