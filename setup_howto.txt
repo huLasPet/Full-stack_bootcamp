@@ -1,6 +1,6 @@
 1.Make a new project folder called
 2.Change Directory to this new folder
-3.Inside the project folder, create a new file called server.js, index.html, index.js
+3.Inside the project folder, create a new file called app.js, index.html, index.js
 4.Set up a new NPM package, npm init
 5.Using NPM install the express module
 6.Require express in your server.js
@@ -17,3 +17,4 @@ Express setup:
     const app = express();
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
+    app.use(express.static("public")); //To serve static files, path will be relative to this folder in the .html
