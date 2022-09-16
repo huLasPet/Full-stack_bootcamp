@@ -2,7 +2,7 @@ const express = require("express");
 const client = require("@mailchimp/mailchimp_marketing");
 const app = express();
 const mailchimpID = "";
-const mailchimpDC = "us18";
+const mailchimpDC = "";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 //To serve static files, path will be relative to this in the .html
