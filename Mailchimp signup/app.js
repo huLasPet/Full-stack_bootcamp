@@ -1,12 +1,12 @@
 const express = require("express");
-const https = require("node:https");
 const client = require("@mailchimp/mailchimp_marketing");
 const app = express();
-const mailchimpID = "a232290777";
+const mailchimpID = "";
 const mailchimpDC = "us18";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public")); //To serve static files, path will be relative to this in the .html
+//To serve static files, path will be relative to this in the .html
+app.use(express.static("public"));
 
 //Mailchimpt client config
 client.setConfig({
@@ -14,10 +14,12 @@ client.setConfig({
   server: mailchimpDC,
 });
 
+//Signup page
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
+//Add person to the list with the info from the signup page
 app.post("/submit", (req, res) => {
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
