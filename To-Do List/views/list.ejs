@@ -16,6 +16,16 @@
     ></script>
   </head>
   <body>
-    <h1>It's <%= day %>.</h1>
+    <h1><%= day %></h1>
+    <ul>
+      <% toDoList.forEach(listItem => { %>
+      <li><%= listItem %></li>
+      <% }) %>
+    </ul>
+
+    <form action="/" method="post">
+      <input name="newToDo" type="text" placeholder="New to-do item" />
+      <button type="submit">Submit</button>
+    </form>
   </body>
 </html>

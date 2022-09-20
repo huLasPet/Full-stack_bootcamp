@@ -8,11 +8,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
+let toDoList = ["Food", "More food", "Fooooood"];
+
+function getTheDay() {
   let today = new Date();
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  let whatDay = days[today.getDay()];
-  res.render("list", { day: whatDay });
+  let options = {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  };
+  let whatDay = today.toLocaleDateString("en-GB", options);
+  return whatDay;
+}
+
+app.get("/", (req, res) => {
+  res.render("list", { day: getTheDay(), toDoList: toDoList });
+});
+
+app.post("/", (req, res) => {
+  toDoList.push(req.body.newToDo);
+  res.redirect("/");
 });
 
 app.listen(3000);
