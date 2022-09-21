@@ -17,15 +17,18 @@
   </head>
   <body>
     <h1><%= day %></h1>
-    <ul>
+    <ul class="box">
       <% toDoList.forEach(listItem => { %>
-      <li><%= listItem %></li>
+      <li class="item">
+        <input type="checkbox" name="Test" id="" />
+        <p><%= listItem %></p>
+      </li>
       <% }) %>
     </ul>
-
+    <input type="text" />
     <form action="/" method="post">
       <input name="newToDo" type="text" placeholder="New to-do item" />
-      <button type="submit">Submit</button>
+      <button type="submit">Add</button>
     </form>
   </body>
 </html>
