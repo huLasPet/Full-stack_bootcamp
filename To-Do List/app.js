@@ -1,5 +1,6 @@
 const express = require("express");
 const ejs = require("ejs");
+const customDate = require("./date");
 const app = express();
 
 app.set("view engine", "ejs");
@@ -10,19 +11,8 @@ app.use(express.static("public"));
 
 let toDoList = ["Food", "More food", "Fooooood"];
 
-function getTheDay() {
-  let today = new Date();
-  let options = {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  };
-  let whatDay = today.toLocaleDateString("en-GB", options);
-  return whatDay;
-}
-
 app.get("/", (req, res) => {
-  res.render("list", { day: getTheDay(), toDoList: toDoList });
+  res.render("list", { day: customDate.getTheDay(), toDoList: toDoList });
 });
 
 app.post("/", (req, res) => {
