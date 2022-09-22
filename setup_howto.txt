@@ -14,21 +14,43 @@
 Express setup with EJS:
 1.Server.js add this:
     const express = require("express");
-    const ejs  = require("ejs);
+    const ejs = require("ejs");
     const app = express();
+
     app.set("view engine", "ejs");
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use(express.static("public")); //To serve static files, path will be relative to this folder in the .html
+    app.use(express.static("public"));
+
+    app.get("/", (req, res) => {
+    res.render("index");
+    });
+
+    app.listen(3000);
+
 
 
 HTML:
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/styles.css" />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
-      crossorigin="anonymous"
-      defer
-    ></script>
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <title></title>
+            <meta name="description" content="">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
+            <link rel="stylesheet" href="/css/styles.css" />
+            <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+            crossorigin="anonymous"
+            defer
+            ></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js" defer></script>
+        </head>
+        <body>
+        </body>
+    </html>
 
