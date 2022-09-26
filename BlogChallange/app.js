@@ -18,4 +18,11 @@ app.get("/", (req, res) => {
   res.render("index", { indexText: homeStartingText });
 });
 
+app.get("/about", (req, res) => {
+  res.render("about", { aboutText: aboutText });
+});
+
+app.get("/contact", (req, res) => {
+  res.render("contact", { contactText: contactText });
+});
 app.listen(3000);
