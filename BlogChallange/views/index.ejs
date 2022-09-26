@@ -1,9 +1,11 @@
 <%- include ("partials/header") %>
 <div class="main-body">
   <h1>Home</h1>
-  <p><%- indexText %></p>
-  <% blogText.forEach(element => { %>
-  <p><%- element %></p>
-  <% }) %>
+  <p class="blogPreview"><%- indexText %></p>
+  <% for( let index = 0; index < blogText.length; index++ ) { %>
+  <div class="blogPreview">
+    <br />
+    <%- blogText[index] %> <% } %>
+  </div>
 </div>
 <%- include ("partials/footer") %>

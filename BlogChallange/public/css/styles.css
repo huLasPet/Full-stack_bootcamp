@@ -16,6 +16,7 @@
 
 .footer-padding {
   padding-bottom: 60px;
+  left: 0px;
 }
 
 .footer {
@@ -39,8 +40,13 @@
 
 .main-body {
   padding: 60px;
-  background: #d3d3d3;
 }
-body {
-  background: #d3d3d3;
+
+.blogPreview *,
+.blogPreview {
+  display: block;
+  max-width: 150ch;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

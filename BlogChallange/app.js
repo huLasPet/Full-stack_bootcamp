@@ -14,6 +14,7 @@ const aboutText =
 const contactText =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu nulla egestas, efficitur mi vitae, porttitor ex. Vivamus consequat erat aliquam faucibus elementum. Nunc congue quis lectus nec finibus.";
 let blogText = [];
+
 app.get("/", (req, res) => {
   res.render("index", { indexText: homeStartingText, blogText: blogText });
 });
