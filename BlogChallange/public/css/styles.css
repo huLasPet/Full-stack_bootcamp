@@ -9,6 +9,7 @@
   margin-bottom: 0;
   font-size: 16px;
   letter-spacing: 5px;
+  position: static;
 }
 .navbar-nav li a:hover {
   color: #ff0000 !important;
@@ -20,7 +21,7 @@
 }
 
 .footer {
-  position: absolute;
+  position: fixed;
   text-align: center;
   bottom: 0;
   width: 100%;
@@ -41,6 +42,11 @@
 .main-body {
   padding: 60px;
   word-break: break-all;
+}
+
+body {
+  position: relative;
+  min-height: 100%;
 }
 
 .blogPreview *,
