@@ -40,6 +40,7 @@
 
 .main-body {
   padding: 60px;
+  word-break: break-all;
 }
 
 .blogPreview *,

@@ -2,10 +2,11 @@
 <div class="main-body">
   <h1>Home</h1>
   <p class="blogPreview"><%- indexText %></p>
-  <% for( let index = 0; index < blogText.length; index++ ) { %>
+  <% for( let index = 0; index < blogItems.length; index++ ) { %>
   <div class="blogPreview">
     <br />
-    <%- blogText[index] %> <% } %>
+    <%- blogItems[index] %>
+    <a href="/blog/<%= index %> ">Continue</a><% } %>
   </div>
 </div>
 <%- include ("partials/footer") %>
