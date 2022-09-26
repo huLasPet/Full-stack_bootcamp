@@ -9,7 +9,6 @@
   margin-bottom: 0;
   font-size: 16px;
   letter-spacing: 5px;
-  position: static;
 }
 .navbar-nav li a:hover {
   color: #ff0000 !important;
