@@ -32,7 +32,9 @@ app.get("/compose", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-  blogItems.push(req.body.blogPost);
+  //Using replace to remove the p tags that would break the overflow
+  let cleanPost = req.body.blogPost.replace(/<p>|<\/p>/g, "");
+  blogItems.push(cleanPost);
   res.redirect("/");
 });
 

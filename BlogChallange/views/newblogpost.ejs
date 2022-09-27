@@ -15,7 +15,10 @@
 </div>
 <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
 <script>
-  ClassicEditor.create(document.querySelector("#blogPost")).catch((error) => {
+  ClassicEditor.create(document.querySelector("#blogPost"), {
+    configautoParagraph: false,
+    enterMode: ENTER_BR,
+  }).catch((error) => {
     console.error(error);
   });
 </script>

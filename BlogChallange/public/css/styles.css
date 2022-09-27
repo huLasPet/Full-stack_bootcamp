@@ -54,7 +54,7 @@ html {
 .blogPreview *,
 .blogPreview {
   display: block;
-  max-width: 150ch;
+  max-width: 100ch;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
