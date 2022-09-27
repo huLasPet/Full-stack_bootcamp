@@ -3,11 +3,10 @@
 <div class="main-body">
   <h1>Home</h1>
   <p class="blogPreview"><%- indexText %></p>
-  <% blogItems.forEach((element, index) => { %>
+  <% blogItems.forEach((blogPost, index) => { %>
   <div class="blogPreview">
     <br />
-    <%- element %>
-    <a href="/blog/<%= index %> ">Continue</a>
+    <a class="blogPostA" href="/blog/<%= index %> "><%- blogPost %></a>
   </div>
   <% }) %>
 </div>
