@@ -39,9 +39,9 @@ async function challange() {
   //Connect
   await mongoose.connect("mongodb://localhost:27017/personDB");
 
-  //Schema
+  //Schema with validation between {}
   const personSchema = new mongoose.Schema({
-    name: String,
+    name: { type: String, required: true },
     age: Number,
   });
 
@@ -49,12 +49,26 @@ async function challange() {
   const personModel = mongoose.model("Person", personSchema);
 
   //Create and save - use await or in the Display items section it will not display what was saved here
-  const newPerson = new personModel({ name: "Bela", age: 99 });
+  const newPerson = new personModel({ name: "Jozsi", age: 99 });
   await newPerson.save();
 
   //Display items
-  const displayPeople = await personModel.find();
-  console.log(displayPeople);
+  const displayPerson = await personModel.find();
+  displayPerson.forEach((element) => {
+    console.log(element.name);
+  });
+
+  //Modify entry
+  const modifyPerson = await personModel.findOne({ name: "Bela" });
+  modifyPerson.name = "Geza";
+  modifyPerson.save();
+
+  //Delete entry
+  const test = personModel.deleteOne({ name: "Jozsi" });
+  console.log("User deleted: ", await test);
+
+  //Close connection
+  mongoose.connection.close();
 }
 
 challange().catch((err) => console.log(err));
