@@ -64,8 +64,8 @@ async function challange() {
   modifyPerson.save();
 
   //Delete entry
-  const test = personModel.deleteOne({ name: "Jozsi" });
-  console.log("User deleted: ", await test);
+  const deletePerson = personModel.deleteOne({ name: "Jozsi" });
+  console.log("User deleted: ", await deletePerson);
 
   //Close connection
   mongoose.connection.close();
