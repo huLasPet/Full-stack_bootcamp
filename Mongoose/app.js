@@ -75,9 +75,12 @@ async function challange() {
 
   //Modify entry
   const modifyPerson = await personModel.findOne({ name: "Sanyi2" });
-  modifyPerson.name = "Geza";
-  modifyPerson.favoriteItem = newFavItem;
-  modifyPerson.save();
+  //modifyPerson.name = "Geza";
+  //modifyPerson.favoriteItem = newFavItem;
+  //modifyPerson.save();
+
+  //Another way to update -- ({filter}, {update})
+  const anotherUpdate = await personModel.updateOne({ _id: "6343d9e3042576c693b157cb" }, { favoriteItem: newFavItem });
 
   //Delete 1 entry with basic feedback
   const deletePerson = personModel.deleteOne({ name: "Jozsi" });
