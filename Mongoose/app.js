@@ -39,17 +39,32 @@ async function challange() {
   //Connect
   await mongoose.connect("mongodb://localhost:27017/personDB");
 
-  //Schema with validation between {}
+  //Basic Schema
+  const favItemSchema = new mongoose.Schema({
+    name: String,
+  });
+
+  //Schema with validation between {}, favoriteItem references another table
+  //https://dev.to/alexmercedcoder/mongodb-relationships-using-mongoose-in-nodejs-54cc
   const personSchema = new mongoose.Schema({
     name: { type: String, required: true },
     age: Number,
+    favoriteItem: favItemSchema,
   });
 
   //Model
+  const favItemModel = mongoose.model("Item", favItemSchema);
   const personModel = mongoose.model("Person", personSchema);
 
   //Create and save - use await or in the Display items section it will not display what was saved here
-  const newPerson = new personModel({ name: "Jozsi", age: 99 });
+  //newFavItem could be a search result in the DB as well, not just a new item
+  const newFavItem = new favItemModel({ name: "Brick" });
+  //await newFavItem.save();
+  const newPerson = new personModel({
+    name: "Sanyi5",
+    age: 99,
+    favoriteItem: newFavItem,
+  });
   await newPerson.save();
 
   //Display items
@@ -59,13 +74,18 @@ async function challange() {
   });
 
   //Modify entry
-  const modifyPerson = await personModel.findOne({ name: "Bela" });
+  const modifyPerson = await personModel.findOne({ name: "Sanyi2" });
   modifyPerson.name = "Geza";
+  modifyPerson.favoriteItem = newFavItem;
   modifyPerson.save();
 
-  //Delete entry
+  //Delete 1 entry with basic feedback
   const deletePerson = personModel.deleteOne({ name: "Jozsi" });
   console.log("User deleted: ", await deletePerson);
+
+  //Delete many
+  const deleteManyPpl = personModel.deleteMany({ name: "Sanyi5" });
+  console.log("Users deleted: ", await deleteManyPpl);
 
   //Close connection
   mongoose.connection.close();
