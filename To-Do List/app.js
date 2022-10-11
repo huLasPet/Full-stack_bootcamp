@@ -60,9 +60,13 @@ function main() {
     //Add the data to the DB and when that is done THEN call the redirect
     //Nothing on reject here either
     if (req.body.remove != undefined) {
-      removeFromDB(req).then(() => {
-        res.redirect("/");
-      });
+      removeFromDB(req)
+        .then(() => {
+          res.redirect("/");
+        })
+        .catch(() => {
+          res.redirect("/");
+        });
     } else {
       addToDB(req).then(() => {
         res.redirect("/");
