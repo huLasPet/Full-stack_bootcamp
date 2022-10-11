@@ -19,13 +19,16 @@
   <body>
     <h1><%= day %></h1>
     <ul class="box">
+      <li class="item">
+        <p class="heading">Done</p>
+        <p>Task</p>
+      </li>
       <% toDoList.forEach(listItem => { %>
       <li class="item">
-        <input type="checkbox" />
-        <p><%= listItem.todo %></p>
         <form action="/" method="post">
-          <button name="remove" value="<%= listItem._id %>" type="submit">-</button>
+          <input type="checkbox" onChange="this.form.submit()" name="remove" value="<%= listItem._id %>" />
         </form>
+        <p><%= listItem.todo %></p>
       </li>
       <% }) %>
     </ul>

@@ -37,11 +37,6 @@ h1 {
   border-bottom: 0;
 }
 
-input:checked + p {
-  text-decoration: line-through;
-  text-decoration-color: #ff0000;
-}
-
 input[type="checkbox"] {
   margin: 20px;
 }
@@ -51,7 +46,6 @@ p {
   padding: 20px;
   font-size: 20px;
   font-weight: 200;
-  justify-content: center;
 }
 
 form {
@@ -80,7 +74,6 @@ input[type="text"] {
   background: transparent;
   font-size: 20px;
   font-weight: 200;
-  width: 313px;
 }
 
 input[type="text"]:focus {
@@ -97,4 +90,8 @@ footer {
   color: white;
   color: rgba(0, 0, 0, 0.5);
   text-align: center;
+}
+
+.heading {
+  margin: 0;
 }
