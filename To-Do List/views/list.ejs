@@ -23,6 +23,9 @@
       <li class="item">
         <input type="checkbox" />
         <p><%= listItem.todo %></p>
+        <form action="/" method="post">
+          <button name="remove" value="<%= listItem._id %>" type="submit">-</button>
+        </form>
       </li>
       <% }) %>
     </ul>

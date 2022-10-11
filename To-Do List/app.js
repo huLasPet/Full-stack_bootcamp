@@ -28,6 +28,14 @@ async function addToDB(req) {
   mongoose.connection.close();
 }
 
+//Remove item from the DB
+async function removeFromDB(req) {
+  await mongoose.connect("mongodb://localhost:27017/todoDB");
+  let removeItem = toDoModel.deleteOne({ _id: req.body.remove });
+  await removeItem;
+  mongoose.connection.close();
+}
+
 //Get all ToDos from the DB
 async function getFromDB() {
   await mongoose.connect("mongodb://localhost:27017/todoDB");
@@ -51,9 +59,15 @@ function main() {
   app.post("/", async (req, res) => {
     //Add the data to the DB and when that is done THEN call the redirect
     //Nothing on reject here either
-    addToDB(req).then(() => {
-      res.redirect("/");
-    });
+    if (req.body.remove != undefined) {
+      removeFromDB(req).then(() => {
+        res.redirect("/");
+      });
+    } else {
+      addToDB(req).then(() => {
+        res.redirect("/");
+      });
+    }
   });
 
   app.listen(3000);
