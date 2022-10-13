@@ -1,11 +1,19 @@
-function getTheDay() {
-  let today = new Date();
+function getTheDay(start, offset) {
+  let today;
+  if (start === null) {
+    today = new Date();
+  } else {
+    today = new Date(start);
+  }
+  today.setDate(today.getDate() + parseInt(offset));
   let options = {
     weekday: "long",
     day: "numeric",
     month: "long",
+    year: "numeric",
   };
   let whatDay = today.toLocaleDateString("en-GB", options);
+
   return whatDay;
 }
 

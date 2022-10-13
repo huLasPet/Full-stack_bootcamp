@@ -17,13 +17,14 @@ const toDoSchema = new mongoose.Schema({
 });
 const toDoModel = mongoose.model("ToDo", toDoSchema);
 
-//Create the list to hold the items from the DB
+//Create the list to hold the items from the DB and the starting date
 let toDoList = [];
+let date = customDate.getTheDay(null, 0);
 
 //Connect to the DB and add a new ToDo item from req
 async function addToDB(req) {
   await mongoose.connect("mongodb://localhost:27017/todoDB");
-  let toDoItem = new toDoModel({ todo: req.body.newToDo, date: customDate.getTheDay() });
+  let toDoItem = new toDoModel({ todo: req.body.newToDo, date: date });
   await toDoItem.save();
   mongoose.connection.close();
 }
@@ -37,10 +38,10 @@ async function removeFromDB(req) {
 }
 
 //Get all ToDos from the DB
-async function getFromDB() {
+async function getFromDB(fromDate) {
   await mongoose.connect("mongodb://localhost:27017/todoDB");
   toDoList.length = 0;
-  let allToDos = await toDoModel.find();
+  let allToDos = await toDoModel.find({ date: fromDate });
   allToDos.forEach((element) => {
     toDoList.push(element);
   });
@@ -51,27 +52,34 @@ function main() {
   app.get("/", async (req, res) => {
     //Get data from the DB, if that was successful THEN call the anonym function to render the page
     //.then({success}, {reject}) is the full but there is no reject here
-    getFromDB().then(() => {
-      res.render("list", { day: customDate.getTheDay(), toDoList: toDoList });
+    getFromDB(date).then(() => {
+      res.render("list", { day: date, toDoList: toDoList });
     });
   });
 
   app.post("/", async (req, res) => {
+    if (req.body.dayOffset != undefined) {
+      date = customDate.getTheDay(date, req.body.dayOffset);
+      res.redirect("/");
+    }
+  });
+
+  app.post("/add", async (req, res) => {
     //Add the data to the DB and when that is done THEN call the redirect
     //Nothing on reject here either
-    if (req.body.remove != undefined) {
-      removeFromDB(req)
-        .then(() => {
-          res.redirect("/");
-        })
-        .catch(() => {
-          res.redirect("/");
-        });
-    } else {
-      addToDB(req).then(() => {
+    addToDB(req).then(() => {
+      res.redirect("/");
+    });
+  });
+
+  app.post("/remove", async (req, res) => {
+    removeFromDB(req)
+      .then(() => {
+        res.redirect("/");
+      })
+      .catch(() => {
         res.redirect("/");
       });
-    }
   });
 
   app.listen(3000);
