@@ -20,9 +20,10 @@
   <body>
     <form action="/" method="post">
       <button name="dayOffset" onClick="this.form.submit()" value="-1">Previous day</button>
+      <h1><%= day %></h1>
       <button name="dayOffset" onClick="this.form.submit()" value="1">Next day</button>
     </form>
-    <h1><%= day %></h1>
+
     <ul class="box">
       <li class="item">
         <p class="heading">Done</p>

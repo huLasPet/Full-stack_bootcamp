@@ -58,6 +58,7 @@ function main() {
   });
 
   app.post("/", async (req, res) => {
+    //Change the date by the offset so it displays other days too
     if (req.body.dayOffset != undefined) {
       date = customDate.getTheDay(date, req.body.dayOffset);
       res.redirect("/");

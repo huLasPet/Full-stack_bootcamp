@@ -9,6 +9,7 @@ h1 {
   color: rgb(238, 62, 62);
   text-align: center;
   padding-top: 5%;
+  display: contents;
 }
 
 .box {
