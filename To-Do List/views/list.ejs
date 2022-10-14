@@ -28,24 +28,28 @@
       </button>
     </form>
 
-    <ul class="box">
-      <li class="item">
-        <p>Done</p>
-        <p>Task</p>
-      </li>
+    <table class="box">
+      <tr class="item">
+        <th><p>Done</p></th>
+        <th><p>Task</p></th>
+      </tr>
       <% toDoList.forEach(listItem => { %>
-      <li class="item">
-        <p><form action="/remove" method="post">
-          <input type="checkbox" onChange="this.form.submit()" name="remove" value="<%= listItem._id %>" />
-        </form></p>
-        <p><%= listItem.todo %></p>
-      </li>
+      <tr class="item">
+        <td>
+          <form action="/remove" method="post">
+            <p><input type="checkbox" onChange="this.form.submit()" name="remove" value="<%= listItem._id %>" /></p>
+          </form>
+        </td>
+        <td><p><%= listItem.todo %></p></td>
+      </tr>
       <% }) %>
-    </ul>
+    </table>
+
     <form action="/add" method="post">
       <input name="newToDo" type="text" placeholder="New to-do item" />
       <button type="submit">+</button>
     </form>
+
+    <%- include("footer") %>
   </body>
-  <%- include("footer") %>
 </html>
