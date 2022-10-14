@@ -13,7 +13,6 @@ h1 {
 }
 
 .box {
-  max-width: 400px;
   margin: auto;
   border-radius: 5px;
   padding: 0%;
@@ -31,7 +30,7 @@ h1 {
   display: flex;
   align-items: center;
   border-bottom: 1px solid #f1f1f1;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
 .item:last-child {
@@ -43,7 +42,7 @@ input[type="checkbox"] {
 }
 
 p {
-  margin: auto;
+  margin: 0 2%;
   padding: 20px;
   font-size: 20px;
   font-weight: 200;
@@ -51,7 +50,6 @@ p {
 
 form {
   text-align: center;
-  margin-left: 5%;
 }
 
 button[type="submit"] {
@@ -93,6 +91,20 @@ footer {
   text-align: center;
 }
 
-.heading {
-  margin: 0;
+.daychangebutton {
+  vertical-align: super;
+  margin: 0 2%;
+}
+
+ul {
+  width: 50%;
+  display: table;
+  table-layout: fixed;
+}
+
+li {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  word-break: break-all;
 }

@@ -15,7 +15,7 @@ const toDoSchema = new mongoose.Schema({
   todo: String,
   date: String,
 });
-const toDoModel = mongoose.model("ToDo", toDoSchema);
+const ToDoModel = mongoose.model("ToDo", toDoSchema);
 
 //Create the list to hold the items from the DB and the starting date
 let toDoList = [];
@@ -24,7 +24,7 @@ let date = customDate.getTheDay(null, 0);
 //Connect to the DB and add a new ToDo item from req
 async function addToDB(req) {
   await mongoose.connect("mongodb://localhost:27017/todoDB");
-  let toDoItem = new toDoModel({ todo: req.body.newToDo, date: date });
+  let toDoItem = new ToDoModel({ todo: req.body.newToDo, date: date });
   await toDoItem.save();
   mongoose.connection.close();
 }
@@ -32,7 +32,7 @@ async function addToDB(req) {
 //Remove item from the DB
 async function removeFromDB(req) {
   await mongoose.connect("mongodb://localhost:27017/todoDB");
-  let removeItem = toDoModel.deleteOne({ _id: req.body.remove });
+  let removeItem = ToDoModel.deleteOne({ _id: req.body.remove });
   await removeItem;
   mongoose.connection.close();
 }
@@ -41,7 +41,7 @@ async function removeFromDB(req) {
 async function getFromDB(fromDate) {
   await mongoose.connect("mongodb://localhost:27017/todoDB");
   toDoList.length = 0;
-  let allToDos = await toDoModel.find({ date: fromDate });
+  let allToDos = await ToDoModel.find({ date: fromDate });
   allToDos.forEach((element) => {
     toDoList.push(element);
   });

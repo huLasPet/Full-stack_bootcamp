@@ -19,21 +19,25 @@
   </head>
   <body>
     <form action="/" method="post">
-      <button name="dayOffset" onClick="this.form.submit()" value="-1">Previous day</button>
+      <button class="btn btn-outline-danger daychangebutton" name="dayOffset" onClick="this.form.submit()" value="-1">
+        Previous day
+      </button>
       <h1><%= day %></h1>
-      <button name="dayOffset" onClick="this.form.submit()" value="1">Next day</button>
+      <button class="btn btn-outline-danger daychangebutton" name="dayOffset" onClick="this.form.submit()" value="1">
+        Next day
+      </button>
     </form>
 
     <ul class="box">
       <li class="item">
-        <p class="heading">Done</p>
+        <p>Done</p>
         <p>Task</p>
       </li>
       <% toDoList.forEach(listItem => { %>
       <li class="item">
-        <form action="/remove" method="post">
+        <p><form action="/remove" method="post">
           <input type="checkbox" onChange="this.form.submit()" name="remove" value="<%= listItem._id %>" />
-        </form>
+        </form></p>
         <p><%= listItem.todo %></p>
       </li>
       <% }) %>
