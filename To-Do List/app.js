@@ -59,10 +59,8 @@ function main() {
 
   app.post("/", async (req, res) => {
     //Change the date by the offset so it displays other days too
-    if (req.body.dayOffset != undefined) {
-      date = customDate.getTheDay(date, req.body.dayOffset);
-      res.redirect("/");
-    }
+    date = customDate.getTheDay(date, req.body.dayOffset);
+    res.redirect("/");
   });
 
   app.post("/add", async (req, res) => {
@@ -73,6 +71,8 @@ function main() {
     });
   });
 
+  //Delete the data from the DB and THEN redirect
+  //Added a CATCH here just as a test but no needed in this case
   app.post("/remove", async (req, res) => {
     removeFromDB(req)
       .then(() => {
