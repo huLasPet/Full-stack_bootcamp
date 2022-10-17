@@ -1,2 +1,2 @@
-# Full-stack_bootcamp
+# Full-stack bootcamp training material
  
