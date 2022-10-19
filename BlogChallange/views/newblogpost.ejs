@@ -6,7 +6,7 @@
       name="blogPost"
       id="blogPost"
       cols="100"
-      rows="10"
+      rows="50"
       placeholder="Enter text here - start with the title"
     ></textarea>
     <br />
@@ -17,7 +17,6 @@
 <script>
   ClassicEditor.create(document.querySelector("#blogPost"), {
     configautoParagraph: false,
-    enterMode: ENTER_BR,
   }).catch((error) => {
     console.error(error);
   });

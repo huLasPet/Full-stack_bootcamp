@@ -1,3 +1,4 @@
+0.Use .gitignore
 1.Make a new project folder called
 2.Change Directory to this new folder
 3.Inside the project folder, create a new file called app.js, index.html, index.js

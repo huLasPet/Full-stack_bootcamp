@@ -6,7 +6,7 @@
   <% blogItems.forEach((blogPost, index) => { %>
   <div class="blogPreview">
     <br />
-    <a class="blogPostA" href="/blog/<%= index %> "><%- blogPost %></a>
+    <a class="blogPostA" href="/blog/<%= index %> "><%- blogPost.post %></a>
   </div>
   <% }) %>
 </div>
