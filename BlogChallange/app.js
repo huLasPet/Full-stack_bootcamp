@@ -73,6 +73,17 @@ function main() {
     let blogNumber = req.params.blogid;
     res.render("blogpost", { blogExpanded: blogItems[blogNumber] });
   });
+
+  app.get("/api/all", (req, res) => {
+    getAllFromDB()
+      .then(() => {
+        res.send(blogItems);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.send("Something went wrong.");
+      });
+  });
   app.listen(3000);
 }
 
