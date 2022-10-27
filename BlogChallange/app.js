@@ -26,10 +26,10 @@ const aboutText =
 const contactText =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu nulla egestas, efficitur mi vitae, porttitor ex. Vivamus consequat erat aliquam faucibus elementum. Nunc congue quis lectus nec finibus.";
 
-async function addToDB(req) {
+async function addToDB(post) {
   let date = customDate.getTheDay(null, 0);
   await mongoose.connect("mongodb://localhost:27017/blogDB");
-  let blogPost = new BlogModel({ post: req.body.blogPost.replace(/<p>|<\/p>/g, ""), date: date });
+  let blogPost = new BlogModel({ post: post, date: date });
   await blogPost.save();
   mongoose.connection.close();
 }
@@ -41,6 +41,13 @@ async function getAllFromDB() {
   allPosts.forEach((element) => {
     blogItems.push(element);
   });
+  mongoose.connection.close();
+}
+
+async function deleteOneFromDB(id) {
+  await mongoose.connect("mongodb://localhost:27017/blogDB");
+  let deleteOne = BlogModel.deleteOne({ _id: id });
+  await deleteOne;
   mongoose.connection.close();
 }
 
@@ -64,7 +71,8 @@ function main() {
   });
 
   app.post("/", (req, res) => {
-    addToDB(req).then(() => {
+    let post = req.body.blogPost.replace(/<p>|<\/p>/g, "");
+    addToDB(post).then(() => {
       res.redirect("/");
     });
   });
@@ -84,6 +92,23 @@ function main() {
         res.send("Something went wrong.");
       });
   });
+
+  app.post("/api/post-new", (req, res) => {
+    addToDB(req.query.post).then(() => {
+      res.send("Got it.");
+    });
+  });
+
+  app.post("/api/delete-one", (req, res) => {
+    deleteOneFromDB(req.query.id)
+      .then(() => {
+        res.send("Deleted it.");
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  });
+
   app.listen(3000);
 }
 
