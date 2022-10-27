@@ -1,6 +1,17 @@
 <%- include ("partials/header") %>
 <div class="main-body footerfix">
-  <%- blogExpanded.date %> <br />
+  <%- blogExpanded.date %>
+  <form action="/delete/<%= blogExpanded._id %> " method="post">
+    <p>
+      <input
+        type="submit"
+        class="btn btn-outline-danger"
+        onclick="return confirm('Are you sure you want to permanently delete this post?')"
+        name="id"
+        value="Delete post"
+      />
+    </p>
+  </form>
   <%- blogExpanded.post %>
 </div>
 <%- include ("partials/footer") %>

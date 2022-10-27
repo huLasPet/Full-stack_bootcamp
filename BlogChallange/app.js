@@ -47,8 +47,9 @@ async function getAllFromDB() {
 async function deleteOneFromDB(id) {
   await mongoose.connect("mongodb://localhost:27017/blogDB");
   let deleteOne = BlogModel.deleteOne({ _id: id });
-  await deleteOne;
+  let result = ("Deleted count:", await deleteOne);
   mongoose.connection.close();
+  return result;
 }
 
 function main() {
@@ -82,6 +83,16 @@ function main() {
     res.render("blogpost", { blogExpanded: blogItems[blogNumber] });
   });
 
+  app.post("/delete/:id", (req, res) => {
+    deleteOneFromDB(req.params.id)
+      .then(() => {
+        res.redirect("/");
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  });
+
   app.get("/api/all", (req, res) => {
     getAllFromDB()
       .then(() => {
@@ -101,8 +112,12 @@ function main() {
 
   app.post("/api/delete-one", (req, res) => {
     deleteOneFromDB(req.query.id)
-      .then(() => {
-        res.send("Deleted it.");
+      .then((result) => {
+        if (result.deletedCount === 0) {
+          res.send("No item with that id.");
+        } else {
+          res.send("Done.");
+        }
       })
       .catch((err) => {
         res.send(err);
