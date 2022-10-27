@@ -44,6 +44,13 @@ async function getAllFromDB() {
   mongoose.connection.close();
 }
 
+async function getOneFromDB(id) {
+  await mongoose.connect("mongodb://localhost:27017/blogDB");
+  let onePost = await BlogModel.find({ _id: id });
+  mongoose.connection.close();
+  return onePost;
+}
+
 async function deleteOneFromDB(id) {
   await mongoose.connect("mongodb://localhost:27017/blogDB");
   let deleteOne = BlogModel.deleteOne({ _id: id });
@@ -97,6 +104,17 @@ function main() {
     getAllFromDB()
       .then(() => {
         res.send(blogItems);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.send("Something went wrong.");
+      });
+  });
+
+  app.get("/api/get-one", (req, res) => {
+    getOneFromDB(req.query.id)
+      .then((result) => {
+        res.send(result);
       })
       .catch((err) => {
         console.log(err);
