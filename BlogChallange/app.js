@@ -59,6 +59,19 @@ async function deleteOneFromDB(id) {
   return result;
 }
 
+async function patchOneInDB(id, post) {
+  await mongoose.connect("mongodb://localhost:27017/blogDB");
+  let onePost = await BlogModel.findOneAndUpdate({ _id: id }, { post: post });
+  mongoose.connection.close();
+}
+
+async function putOneInDB(id, post) {
+  await mongoose.connect("mongodb://localhost:27017/blogDB");
+  let date = customDate.getTheDay(null, 0);
+  let onePost = await BlogModel.findOneAndReplace({ _id: id }, { post: post, date: date });
+  mongoose.connection.close();
+}
+
 function main() {
   app.get("/", (req, res) => {
     getAllFromDB().then(() => {
@@ -135,7 +148,7 @@ function main() {
           res.send("Something went wrong.");
         });
     })
-    .post((req, res) => {
+    .delete((req, res) => {
       //Delete 1 post with the specified ID
       deleteOneFromDB(req.query.id)
         .then((result) => {
@@ -148,6 +161,18 @@ function main() {
         .catch((err) => {
           res.send(err);
         });
+    })
+    .patch((req, res) => {
+      //Patch or update post
+      patchOneInDB(req.query.id, req.query.post).then(() => {
+        res.send("Got it.");
+      });
+    })
+    .put((req, res) => {
+      //Put or replace post
+      putOneInDB(req.query.id, req.query.post).then(() => {
+        res.send("Got it.");
+      });
     });
 
   app.listen(3000);
