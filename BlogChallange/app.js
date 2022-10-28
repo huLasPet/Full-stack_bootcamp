@@ -53,22 +53,22 @@ async function getOneFromDB(id) {
 
 async function deleteOneFromDB(id) {
   await mongoose.connect("mongodb://localhost:27017/blogDB");
-  let deleteOne = BlogModel.deleteOne({ _id: id });
-  let result = ("Deleted count:", await deleteOne);
+  let deletePost = BlogModel.deleteOne({ _id: id });
+  let result = ("Deleted count:", await deletePost);
   mongoose.connection.close();
   return result;
 }
 
 async function patchOneInDB(id, post) {
   await mongoose.connect("mongodb://localhost:27017/blogDB");
-  let onePost = await BlogModel.findOneAndUpdate({ _id: id }, { post: post });
+  let patchPost = await BlogModel.findOneAndUpdate({ _id: id }, { post: post });
   mongoose.connection.close();
 }
 
 async function putOneInDB(id, post) {
   await mongoose.connect("mongodb://localhost:27017/blogDB");
   let date = customDate.getTheDay(null, 0);
-  let onePost = await BlogModel.findOneAndReplace({ _id: id }, { post: post, date: date });
+  let putPost = await BlogModel.findOneAndReplace({ _id: id }, { post: post, date: date });
   mongoose.connection.close();
 }
 
