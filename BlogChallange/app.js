@@ -100,47 +100,55 @@ function main() {
       });
   });
 
-  app.get("/api/all", (req, res) => {
-    getAllFromDB()
-      .then(() => {
-        res.send(blogItems);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.send("Something went wrong.");
+  //Can use app.route to specify get/post/put/etc without having to type out the path every time
+  app
+    .route("/api/posts")
+    .get((req, res) => {
+      //Get all posts
+      getAllFromDB()
+        .then(() => {
+          res.send(blogItems);
+        })
+        .catch((err) => {
+          console.log(err);
+          res.send("Something went wrong.");
+        });
+    })
+    .post((req, res) => {
+      //Add a new post
+      addToDB(req.query.post).then(() => {
+        res.send("Got it.");
       });
-  });
-
-  app.get("/api/get-one", (req, res) => {
-    getOneFromDB(req.query.id)
-      .then((result) => {
-        res.send(result);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.send("Something went wrong.");
-      });
-  });
-
-  app.post("/api/post-new", (req, res) => {
-    addToDB(req.query.post).then(() => {
-      res.send("Got it.");
     });
-  });
 
-  app.post("/api/delete-one", (req, res) => {
-    deleteOneFromDB(req.query.id)
-      .then((result) => {
-        if (result.deletedCount === 0) {
-          res.send("No item with that id.");
-        } else {
-          res.send("Done.");
-        }
-      })
-      .catch((err) => {
-        res.send(err);
-      });
-  });
+  //Can use app.route to specify get/post/put/etc without having to type out the path every time
+  app
+    .route("/api/one-post")
+    .get((req, res) => {
+      //Get 1 post with the specified ID
+      getOneFromDB(req.query.id)
+        .then((result) => {
+          res.send(result);
+        })
+        .catch((err) => {
+          console.log(err);
+          res.send("Something went wrong.");
+        });
+    })
+    .post((req, res) => {
+      //Delete 1 post with the specified ID
+      deleteOneFromDB(req.query.id)
+        .then((result) => {
+          if (result.deletedCount === 0) {
+            res.send("No item with that id.");
+          } else {
+            res.send("Done.");
+          }
+        })
+        .catch((err) => {
+          res.send(err);
+        });
+    });
 
   app.listen(3000);
 }
