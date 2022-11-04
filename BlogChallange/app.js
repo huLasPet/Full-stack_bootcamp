@@ -178,4 +178,6 @@ function main() {
   app.listen(3000);
 }
 
-main();
+if (require.main === module) {
+  main();
+}
