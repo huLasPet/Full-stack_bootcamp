@@ -21,11 +21,11 @@ const UserSchema = new mongoose.Schema({
 });
 const UserModel = mongoose.model("User", UserSchema);
 
-async function getAllFromDB() {
+async function getOneFromDB(email) {
   await mongoose.connect("mongodb://localhost:27017/userDB");
-  let allUsers = await UserModel.find();
+  let oneUser = await UserModel.find({ email: email });
   mongoose.connection.close();
-  return allUsers;
+  return oneUser;
 }
 
 async function addToDB(email, password) {
@@ -50,9 +50,22 @@ function main() {
     res.render("home");
   });
 
-  app.get("/login", (req, res) => {
-    res.render("login");
-  });
+  app
+    .route("/login")
+    .get((req, res) => {
+      res.render("login");
+    })
+    .post((req, res) => {
+      const username = req.body.username;
+      const password = req.body.password;
+      getOneFromDB(username).then((result) => {
+        if (result != "") {
+          console.log(result);
+        } else {
+          console.log("No such user");
+        }
+      });
+    });
 
   app
     .route("/register")
@@ -60,12 +73,12 @@ function main() {
       res.render("register");
     })
     .post((req, res) => {
-      //saveResult is undefined if the asnyc function does not return anything
+      //saveResult is undefined if the asnyc function does not return anything at the end - returns in the .save() are not enough
       addToDB(req.body.username, req.body.password).then((saveResult) => {
         if (saveResult != "True") {
           res.send("Failed to register: ", saveResult);
         } else {
-          res.redirect("/");
+          res.render("secrets");
         }
       });
     });

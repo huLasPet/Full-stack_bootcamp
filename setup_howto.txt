@@ -34,13 +34,33 @@ Express setup with EJS and Mongoose:
     async function exampleFunction() {
         await mongoose.connect("mongodb://localhost:27017/blogDB");
         let someExample = new SomeModel({ field1: value1, field2: value2 });
-        await someExample.save();
+        let result = await someExample
+            .save()
+            .then(() => {
+                return "True";
+            })
+            .catch((err) => {
+                console.log("Something went wrong: ", err.message);
+                return err.message;
+            });
         mongoose.connection.close();
+        return result;
     }
     
     function main(){
-        app.get("/", (req, res) => {
+        app.route("/)
+        .get((req, res) => {
         res.render("index");
+        })
+        .post((req, res) => {
+            //saveResult is the result returned in the function
+            exampleFunction().then((saveResult) => {
+                if (saveResult != "True") {
+                res.send("Failed to register: ", saveResult);
+                } else {
+                res.redirect("/");
+                }
+            });
         });
 
         app.listen(3000);
