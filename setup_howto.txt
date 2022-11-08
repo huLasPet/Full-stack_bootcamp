@@ -12,12 +12,14 @@
 11.Run server with nodemon
 
 
-Express setup with EJS and Mongoose:
+Express setup with EJS, dotenv and Mongoose + encryption:
 1.Server.js add this:
     const express = require("express");
     const ejs = require("ejs");
     const app = express();
     const mongoose = require("mongoose");
+    const encrypt = require("mongoose-encryption");
+    require("dotenv").config();
 
 
     app.set("view engine", "ejs");
@@ -29,6 +31,9 @@ Express setup with EJS and Mongoose:
         field1: String,
         field2: String,
     });
+    const secret = process.env.NAME_OF_OPTION_DOTENV_FILE;
+    SomeSchema.plugin(encrypt, { secret: secret, encryptedFields: ["what we want to encrypt here"] });
+
     const SomeModel = mongoose.model("SomeName", SomeSchema);
 
     async function exampleFunction() {

@@ -4,3 +4,4 @@ nodeJS/node_modules
 Secrets/.DS_Store
 Secrets/node_modules
 .DS_Store
+Secrets/.env
