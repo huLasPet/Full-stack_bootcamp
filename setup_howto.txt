@@ -12,7 +12,7 @@
 11.Run server with nodemon
 
 
-Express setup with EJS, dotenv and Mongoose + encryption:
+Express setup with EJS, dotenv, Mongoose + encryption, md5 hash:
 1.Server.js add this:
     require("dotenv").config();
     const express = require("express");
@@ -20,6 +20,7 @@ Express setup with EJS, dotenv and Mongoose + encryption:
     const app = express();
     const mongoose = require("mongoose");
     const encrypt = require("mongoose-encryption");
+    const md5 = require("md5");
     
 
 
@@ -38,7 +39,8 @@ Express setup with EJS, dotenv and Mongoose + encryption:
 
     async function exampleFunction() {
         await mongoose.connect("mongodb://localhost:27017/blogDB");
-        let someExample = new SomeModel({ field1: value1, field2: value2 });
+//md5() if we want to save it as a hash
+        let someExample = new SomeModel({ field1: md5(value1), field2: value2 });
         let result = await someExample
             .save()
             .then(() => {

@@ -4,6 +4,7 @@ const ejs = require("ejs");
 const app = express();
 const mongoose = require("mongoose");
 const encrypt = require("mongoose-encryption");
+const md5 = require("md5");
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -61,8 +62,9 @@ function main() {
       res.render("login");
     })
     .post((req, res) => {
-      const username = req.body.username;
-      const password = req.body.password;
+      //Hashing the login info from the login form so it can be compared to the saved hash from registration
+      const username = md5(req.body.username);
+      const password = md5(req.body.password);
       getOneFromDB(username).then((result) => {
         if (result != null && result.password === password) {
           res.render("secrets");
@@ -79,7 +81,8 @@ function main() {
     })
     .post((req, res) => {
       //saveResult is undefined if the asnyc function does not return anything at the end - returns in the .save() are not enough
-      addToDB(req.body.username, req.body.password).then((saveResult) => {
+      //username/password needs to passed in with md5 to be hashed
+      addToDB((email = md5(req.body.username)), (password = md5(req.body.password))).then((saveResult) => {
         if (saveResult != "True") {
           res.send("Failed to register: ", saveResult);
         } else {
