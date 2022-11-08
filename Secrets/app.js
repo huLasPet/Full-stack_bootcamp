@@ -1,9 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const ejs = require("ejs");
 const app = express();
 const mongoose = require("mongoose");
 const encrypt = require("mongoose-encryption");
-require("dotenv").config();
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -22,8 +22,7 @@ const UserSchema = new mongoose.Schema({
   password: String,
 });
 //Adding encryption using mongoose-encrypt, only encrypting the password so can still search based on e-mail
-const secret = process.env.SECRETS_PROJECT_SECRET;
-UserSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"] });
+UserSchema.plugin(encrypt, { secret: process.env.SECRETS_PROJECT_SECRET, encryptedFields: ["password"] });
 
 const UserModel = mongoose.model("User", UserSchema);
 
