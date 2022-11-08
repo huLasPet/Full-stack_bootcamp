@@ -2,6 +2,7 @@ const express = require("express");
 const ejs = require("ejs");
 const app = express();
 const mongoose = require("mongoose");
+const encrypt = require("mongoose-encryption");
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -19,11 +20,15 @@ const UserSchema = new mongoose.Schema({
   email: String,
   password: String,
 });
+//Adding encryption using mongoose-encrypt, only encrypting the password so can still search based on e-mail
+const secret = "some plain text secret here, very secure";
+UserSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"] });
+
 const UserModel = mongoose.model("User", UserSchema);
 
 async function getOneFromDB(email) {
   await mongoose.connect("mongodb://localhost:27017/userDB");
-  let oneUser = await UserModel.find({ email: email });
+  let oneUser = await UserModel.findOne({ email: email });
   mongoose.connection.close();
   return oneUser;
 }
@@ -59,10 +64,10 @@ function main() {
       const username = req.body.username;
       const password = req.body.password;
       getOneFromDB(username).then((result) => {
-        if (result != "") {
-          console.log(result);
+        if (result != null && result.password === password) {
+          res.render("secrets");
         } else {
-          console.log("No such user");
+          res.send("No such user");
         }
       });
     });
