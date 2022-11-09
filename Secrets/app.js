@@ -63,7 +63,7 @@ function main() {
     })
     .post((req, res) => {
       //Hashing the login info from the login form so it can be compared to the saved hash from registration
-      const username = sha512(req.body.username).toString();
+      const username = req.body.username;
       const password = sha512(req.body.password).toString();
       getOneFromDB(username).then((result) => {
         if (result != null && result.password === password) {
@@ -81,8 +81,8 @@ function main() {
     })
     .post((req, res) => {
       //saveResult is undefined if the asnyc function does not return anything at the end - returns in the .save() are not enough
-      //username/password needs to passed in with md5 to be hashed
-      addToDB((email = sha512(req.body.username)), (password = sha512(req.body.password))).then((saveResult) => {
+      //username/password needs to passed in with sha512 to be hashed
+      addToDB((email = req.body.username), (password = sha512(req.body.password))).then((saveResult) => {
         if (saveResult != "True") {
           res.send("Failed to register: ", saveResult);
         } else {
