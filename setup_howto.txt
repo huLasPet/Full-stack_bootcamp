@@ -12,7 +12,7 @@
 11.Run server with nodemon
 
 
-Express setup with EJS, dotenv, Mongoose + encryption, crypto-js sha512 hash:
+Express setup with EJS, dotenv, Mongoose + encryption, bcrypt:
 1.Server.js add this:
     require("dotenv").config();
     const express = require("express");
@@ -20,7 +20,8 @@ Express setup with EJS, dotenv, Mongoose + encryption, crypto-js sha512 hash:
     const app = express();
     const mongoose = require("mongoose");
     const encrypt = require("mongoose-encryption");
-    const sha512 = require("crypto-js/sha512");
+    const bcrypt = require("bcrypt");
+    const saltRounds = 10;
     
 
 
@@ -37,11 +38,16 @@ Express setup with EJS, dotenv, Mongoose + encryption, crypto-js sha512 hash:
 
     const SomeModel = mongoose.model("SomeName", SomeSchema);
 
-    async function exampleFunction() {
+    async function exampleFunction(value1) {
         await mongoose.connect("mongodb://localhost:27017/blogDB");
-//sha512() if we want to save it as a hash - 
-//USE .toString() when searching in mongo when using this - like this: const username = sha512(req.body.username).toString();
-        let someExample = new SomeModel({ field1: sha512(value1), field2: value2 });
+        bcrypt.hash(value1, saltRounds, function(err, hash){
+            value1 = hash;
+            //to check password use:
+            //bcrypt.compare(enteredPassword, savedInDBPassword, function(err, result){
+            //  result will be True if the 2 passwords are the same
+            //})
+        })
+        let someExample = new SomeModel({ field1: value1, field2: value2 });
         let result = await someExample
             .save()
             .then(() => {
@@ -62,7 +68,8 @@ Express setup with EJS, dotenv, Mongoose + encryption, crypto-js sha512 hash:
         })
         .post((req, res) => {
             //saveResult is the result returned in the function
-            exampleFunction().then((saveResult) => {
+            let value1 = "Some text"
+            exampleFunction(value1).then((saveResult) => {
                 if (saveResult != "True") {
                 res.send("Failed to register: ", saveResult);
                 } else {
