@@ -40,10 +40,10 @@ Express setup with EJS, dotenv, Mongoose + encryption, bcrypt:
 
     async function exampleFunction(value1) {
         await mongoose.connect("mongodb://localhost:27017/blogDB");
-        bcrypt.hash(value1, saltRounds, function(err, hash){
+        bcrypt.hash(value1, saltRounds).then((hash) => {
             value1 = hash;
             //to check password use:
-            //bcrypt.compare(enteredPassword, savedInDBPassword, function(err, result){
+            //bcrypt.compare(enteredPassword, savedInDBPassword).then((result) => {
             //  result will be True if the 2 passwords are the same
             //})
         })

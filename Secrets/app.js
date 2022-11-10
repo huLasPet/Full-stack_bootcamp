@@ -4,8 +4,6 @@ const ejs = require("ejs");
 const app = express();
 const mongoose = require("mongoose");
 const encrypt = require("mongoose-encryption");
-//Switching to bcrypt but leaving it here as an example//
-//const sha512 = require("crypto-js/sha512");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -30,9 +28,9 @@ UserSchema.plugin(encrypt, { secret: process.env.SECRETS_PROJECT_SECRET, encrypt
 
 const UserModel = mongoose.model("User", UserSchema);
 
-async function getOneFromDB(email) {
+async function getOneFromDB(username) {
   await mongoose.connect("mongodb://localhost:27017/userDB");
-  let oneUser = await UserModel.findOne({ email: email });
+  let oneUser = await UserModel.findOne({ email: username });
   mongoose.connection.close();
   return oneUser;
 }
@@ -65,19 +63,16 @@ function main() {
       res.render("login");
     })
     .post((req, res) => {
-      //Hashing the login info from the login form so it can be compared to the saved hash from registration
-      const username = req.body.username;
-      //Commenting out for now due to bcrypt
-      //const password = sha512(req.body.password).toString();
-      const password = req.body.password;
-      getOneFromDB(username).then((result) => {
-        bcrypt.compare(password, result.password, function (err, checkPassed) {
-          if (result != null && checkPassed) {
-            res.render("secrets");
-          } else {
-            res.send("No such user");
-          }
-        });
+      getOneFromDB(req.body.username).then((result) => {
+        if (result != null) {
+          bcrypt.compare(req.body.password, result.password).then((checkPassed) => {
+            if (checkPassed) {
+              res.render("secrets");
+            }
+          });
+        } else {
+          res.send("No such user");
+        }
       });
     });
 
@@ -87,10 +82,8 @@ function main() {
       res.render("register");
     })
     .post((req, res) => {
-      //saveResult is undefined if the asnyc function does not return anything at the end - returns in the .save() are not enough
-      //username/password needs to passed in with sha512 to be hashed, but commenting that out for now due to bcrypt ->
-      //-> addToDB((email = req.body.username), (password = sha512(req.body.password))).then((saveResult) =>
       bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+        //saveResult is undefined if the asnyc function does not return anything at the end - returns in the .save() are not enough
         addToDB((email = req.body.username), (password = hash)).then((saveResult) => {
           console.log("Register result:", hash);
           if (saveResult != "True") {
