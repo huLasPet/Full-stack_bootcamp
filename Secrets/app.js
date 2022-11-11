@@ -29,14 +29,19 @@ UserSchema.plugin(encrypt, { secret: process.env.SECRETS_PROJECT_SECRET, encrypt
 const UserModel = mongoose.model("User", UserSchema);
 
 async function getOneFromDB(username) {
-  await mongoose.connect("mongodb://localhost:27017/userDB");
+  if (mongoose.connection.readyState != 1) {
+    console.log("Connecting to DB");
+    await mongoose.connect("mongodb://localhost:27017/userDB");
+  }
   let oneUser = await UserModel.findOne({ email: username });
-  mongoose.connection.close();
   return oneUser;
 }
 
 async function addToDB(email, password) {
-  await mongoose.connect("mongodb://localhost:27017/userDB");
+  if (mongoose.connection.readyState != 1) {
+    console.log("Connecting to DB");
+    await mongoose.connect("mongodb://localhost:27017/userDB");
+  }
   let newUser = new UserModel({ email: email, password: password });
   //With this it returns true if it saved and returns the error if it didn't - still need to use return result at the end
   let result = await newUser
@@ -48,7 +53,6 @@ async function addToDB(email, password) {
       console.log("Something went wrong: ", err.message);
       return err.message;
     });
-  mongoose.connection.close();
   return result;
 }
 
@@ -85,7 +89,6 @@ function main() {
       bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
         //saveResult is undefined if the asnyc function does not return anything at the end - returns in the .save() are not enough
         addToDB((email = req.body.username), (password = hash)).then((saveResult) => {
-          console.log("Register result:", hash);
           if (saveResult != "True") {
             res.send("Failed to register: ", saveResult);
           } else {
@@ -99,5 +102,6 @@ function main() {
 }
 
 if (require.main === module) {
+  mongoose.connect("mongodb://localhost:27017/userDB");
   main();
 }

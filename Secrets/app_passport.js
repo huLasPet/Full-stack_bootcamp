@@ -3,12 +3,24 @@ const express = require("express");
 const ejs = require("ejs");
 const app = express();
 const mongoose = require("mongoose");
-const encrypt = require("mongoose-encryption");
+const session = require("express-session");
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
 
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: true },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Creating the Schema and Model for Mongoose
 const SecretsSchema = new mongoose.Schema({
@@ -21,32 +33,24 @@ const UserSchema = new mongoose.Schema({
   email: String,
   password: String,
 });
-//Adding encryption using mongoose-encrypt, only encrypting the password so can still search based on e-mail
-UserSchema.plugin(encrypt, { secret: process.env.SECRETS_PROJECT_SECRET, encryptedFields: ["password"] });
+UserSchema.plugin(passportLocalMongoose);
 
 const UserModel = mongoose.model("User", UserSchema);
-
-async function getOneFromDB(username) {
-  await mongoose.connect("mongodb://localhost:27017/userDB");
-  let oneUser = await UserModel.findOne({ email: username });
-  mongoose.connection.close();
-  return oneUser;
-}
+passport.use(UserModel.createStrategy());
+passport.serializeUser(UserModel.serializeUser());
+passport.deserializeUser(UserModel.deserializeUser());
 
 async function addToDB(email, password) {
-  await mongoose.connect("mongodb://localhost:27017/userDB");
-  let newUser = new UserModel({ email: email, password: password });
-  //With this it returns true if it saved and returns the error if it didn't - still need to use return result at the end
-  let result = await newUser
-    .save()
+  if (mongoose.connection.readyState != 1) {
+    await mongoose.connect("mongodb://localhost:27017/userDB");
+  }
+  let result = await UserModel.register(new UserModel({ username: email }), password)
     .then(() => {
       return "True";
     })
     .catch((err) => {
-      console.log("Something went wrong: ", err.message);
-      return err.message;
+      return err;
     });
-  mongoose.connection.close();
   return result;
 }
 
@@ -60,18 +64,40 @@ function main() {
     .get((req, res) => {
       res.render("login");
     })
-    .post((req, res) => {});
+
+    .post(passport.authenticate("local", { failureRedirect: "/login" }), function (req, res) {
+      res.render("secrets");
+    });
+
+  app.route("/logout").get((req, res) => {
+    req.logout((err) => {
+      if (!err) {
+        res.redirect("/");
+      } else {
+        res.send(err);
+      }
+    });
+  });
 
   app
     .route("/register")
     .get((req, res) => {
       res.render("register");
     })
-    .post((req, res) => {});
+    .post((req, res) => {
+      addToDB((email = req.body.username), (password = req.body.password)).then((saveResult) => {
+        if (saveResult != "True") {
+          res.send(saveResult.message);
+        } else {
+          res.render("secrets");
+        }
+      });
+    });
 
   app.listen(3000);
 }
 
 if (require.main === module) {
+  mongoose.connect("mongodb://localhost:27017/userDB");
   main();
 }

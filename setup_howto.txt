@@ -12,6 +12,7 @@
 11.Run server with nodemon
 
 
+
 Express setup with EJS, dotenv, Mongoose + encryption, bcrypt:
 1.Server.js add this:
     require("dotenv").config();
@@ -23,7 +24,6 @@ Express setup with EJS, dotenv, Mongoose + encryption, bcrypt:
     const bcrypt = require("bcrypt");
     const saltRounds = 10;
     
-
 
     app.set("view engine", "ejs");
     app.use(express.json());
@@ -39,7 +39,9 @@ Express setup with EJS, dotenv, Mongoose + encryption, bcrypt:
     const SomeModel = mongoose.model("SomeName", SomeSchema);
 
     async function exampleFunction(value1) {
-        await mongoose.connect("mongodb://localhost:27017/blogDB");
+        if (mongoose.connection.readyState != 1) {
+            await mongoose.connect("mongodb://localhost:27017/userDB");
+        }
         bcrypt.hash(value1, saltRounds).then((hash) => {
             value1 = hash;
             //to check password use:
@@ -57,7 +59,6 @@ Express setup with EJS, dotenv, Mongoose + encryption, bcrypt:
                 console.log("Something went wrong: ", err.message);
                 return err.message;
             });
-        mongoose.connection.close();
         return result;
     }
     
@@ -82,8 +83,52 @@ Express setup with EJS, dotenv, Mongoose + encryption, bcrypt:
     }
 
     if (require.main === module) {
+    mongoose.connect("mongodb://localhost:27017/userDB");
     main();
     }
+
+
+
+Passport:
+    const passport = require("passport");
+    const passportLocalMongoose = require("passport-local-mongoose");
+
+    app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: { secure: true },
+    })
+    );
+    app.use(passport.initialize());
+    app.use(passport.session());
+  //Create mongoose schema before this
+    UserSchema.plugin(passportLocalMongoose);
+  //create the model before this
+    passport.use(UserModel.createStrategy());
+    passport.serializeUser(UserModel.serializeUser());
+    passport.deserializeUser(UserModel.deserializeUser());
+
+  //register
+    async function addToDB(email, password) {
+        if (mongoose.connection.readyState != 1) {
+            await mongoose.connect("mongodb://localhost:27017/userDB");
+        }
+        let result = await UserModel.register(new UserModel({ username: email }), password)
+            .then(() => {
+            return "True";
+            })
+            .catch((err) => {
+            return err;
+            });
+        return result;
+        }  
+    
+  //Login
+        app.post(passport.authenticate("local", { failureRedirect: "/login" }), function (req, res) {
+            res.render("secrets");
+        });
 
 
 
