@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const findOrCreate = require("mongoose-findorcreate");
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -22,7 +24,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-//Creating the Schema and Model for Mongoose
+//Creating the Schema and Model for Mongoose, adding plugins
 const SecretsSchema = new mongoose.Schema({
   secret: String,
   user: String,
@@ -32,14 +34,41 @@ const SecretsModel = mongoose.model("Secret", SecretsSchema);
 const UserSchema = new mongoose.Schema({
   email: String,
   password: String,
+  googleId: String,
 });
 UserSchema.plugin(passportLocalMongoose);
+UserSchema.plugin(findOrCreate);
 
 const UserModel = mongoose.model("User", UserSchema);
+
+//Passport setup for Google OAuth2 - uses the already created UserModel for Mongo
+passport.serializeUser(function (user, done) {
+  done(null, user.id);
+});
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/auth/google/callback",
+    },
+    function (accessToken, refreshToken, profile, cb) {
+      UserModel.findOrCreate({ email: profile.emails[0].value, googleId: profile.id }, function (err, user) {
+        return cb(err, user);
+      });
+    }
+  )
+);
+
+//Local passport strategy
 passport.use(UserModel.createStrategy());
 passport.serializeUser(UserModel.serializeUser());
 passport.deserializeUser(UserModel.deserializeUser());
 
+//Function to add a new user to the DB
 async function addToDB(email, password) {
   if (mongoose.connection.readyState != 1) {
     await mongoose.connect("mongodb://localhost:27017/userDB");
@@ -55,10 +84,11 @@ async function addToDB(email, password) {
 }
 
 function main() {
+  //Home route
   app.get("/", (req, res) => {
     res.render("home");
   });
-
+  //Login route
   app
     .route("/login")
     .get((req, res) => {
@@ -67,7 +97,7 @@ function main() {
     .post(passport.authenticate("local", { failureRedirect: "/login" }), function (req, res) {
       res.render("secrets");
     });
-
+  //Logout route
   app.route("/logout").get((req, res) => {
     req.logout((err) => {
       if (!err) {
@@ -77,7 +107,7 @@ function main() {
       }
     });
   });
-
+  //Registration route
   app
     .route("/register")
     .get((req, res) => {
@@ -92,6 +122,12 @@ function main() {
         }
       });
     });
+
+  //Google OAuth2
+  app.route("/auth/google").get(passport.authenticate("google", { scope: ["profile", "email"] }));
+  app.route("/auth/google/callback").get(passport.authenticate("google", { failureRedirect: "/login" }), (req, res) => {
+    res.render("secrets");
+  });
 
   app.listen(3000);
 }
