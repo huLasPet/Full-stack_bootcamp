@@ -19,7 +19,6 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
   })
 );
 app.use(passport.initialize());
@@ -85,6 +84,7 @@ async function addToDB(email, password) {
 function main() {
   //Home route
   app.get("/", (req, res) => {
+    console.log("Authenticated inside GET Home", req.isAuthenticated());
     res.render("home");
   });
   //Login route
@@ -125,9 +125,11 @@ function main() {
 
   //Google OAuth2
   app.route("/auth/google").get(passport.authenticate("google", { scope: ["profile", "email"] }));
-  app.route("/auth/google/callback").get(passport.authenticate("google", { failureRedirect: "/login" }), (req, res) => {
-    res.render("secrets");
-  });
+  app
+    .route("/auth/google/callback")
+    .get(passport.authenticate("google", { failureRedirect: "/login" }), function (req, res) {
+      res.render("secrets");
+    });
 
   app.listen(3000);
 }
