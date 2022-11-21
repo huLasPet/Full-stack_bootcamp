@@ -1,13 +1,14 @@
 require("dotenv").config();
 const express = require("express");
 const ejs = require("ejs");
-const app = express();
 const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
+
+const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -17,7 +18,7 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: { secure: true },
   })
 );
@@ -41,6 +42,9 @@ UserSchema.plugin(findOrCreate);
 
 const UserModel = mongoose.model("User", UserSchema);
 
+//Local passport strategy
+passport.use(UserModel.createStrategy());
+
 //Passport setup for Google OAuth2 - uses the already created UserModel for Mongo
 passport.serializeUser(function (user, done) {
   done(null, user.id);
@@ -62,11 +66,6 @@ passport.use(
     }
   )
 );
-
-//Local passport strategy
-passport.use(UserModel.createStrategy());
-passport.serializeUser(UserModel.serializeUser());
-passport.deserializeUser(UserModel.deserializeUser());
 
 //Function to add a new user to the DB
 async function addToDB(email, password) {
@@ -101,6 +100,7 @@ function main() {
   app.route("/logout").get((req, res) => {
     req.logout((err) => {
       if (!err) {
+        req.session.destroy();
         res.redirect("/");
       } else {
         res.send(err);
