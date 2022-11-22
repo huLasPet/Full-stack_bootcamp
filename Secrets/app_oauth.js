@@ -27,22 +27,20 @@ app.use(passport.session());
 //Creating the Schema and Model for Mongoose, adding plugins
 const SecretsSchema = new mongoose.Schema({
   secret: String,
-  user: String,
 });
-const SecretsModel = mongoose.model("Secret", SecretsSchema);
+const secretsModel = mongoose.model("Secret", SecretsSchema);
 
 const UserSchema = new mongoose.Schema({
-  email: String,
+  username: String,
   password: String,
   googleId: String,
 });
 UserSchema.plugin(passportLocalMongoose);
 UserSchema.plugin(findOrCreate);
-
-const UserModel = mongoose.model("User", UserSchema);
+const userModel = mongoose.model("User", UserSchema);
 
 //Local passport strategy
-passport.use(UserModel.createStrategy());
+passport.use(userModel.createStrategy());
 
 //Passport setup for Google OAuth2 - uses the already created UserModel for Mongo
 passport.serializeUser(function (user, done) {
@@ -59,19 +57,20 @@ passport.use(
       callbackURL: "http://localhost:3000/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
-      UserModel.findOrCreate({ email: profile.emails[0].value, googleId: profile.id }, function (err, user) {
+      userModel.findOrCreate({ username: profile.emails[0].value, googleId: profile.id }, function (err, user) {
         return cb(err, user);
       });
     }
   )
 );
 
-//Function to add a new user to the DB
-async function addToDB(email, password) {
+//Function to add a new user to the DB if Google login is not used
+async function addToUserDB(username, password) {
   if (mongoose.connection.readyState != 1) {
     await mongoose.connect("mongodb://localhost:27017/userDB");
   }
-  let result = await UserModel.register(new UserModel({ username: email }), password)
+  let result = await userModel
+    .register(new userModel({ username: username }), password)
     .then(() => {
       return "True";
     })
@@ -81,12 +80,30 @@ async function addToDB(email, password) {
   return result;
 }
 
+//Function to add a Secret to the DB
+async function addToSecretsDB(secret) {
+  if (mongoose.connection.readyState != 1) {
+    await mongoose.connect("mongodb://localhost:27017/secretDB");
+  }
+  let newSecret = new secretsModel({ secret: secret });
+  let result = await newSecret
+    .save()
+    .then(() => {
+      return "True";
+    })
+    .catch((err) => {
+      console.log("Something went wrong: ", err.message);
+      return err.message;
+    });
+  return result;
+}
+
 function main() {
   //Home route
   app.get("/", (req, res) => {
-    console.log("Authenticated inside GET Home", req.isAuthenticated());
     res.render("home");
   });
+
   //Login route
   app
     .route("/login")
@@ -94,8 +111,9 @@ function main() {
       res.render("login");
     })
     .post(passport.authenticate("local", { failureRedirect: "/login" }), function (req, res) {
-      res.render("secrets");
+      res.redirect("/secrets");
     });
+
   //Logout route
   app.route("/logout").get((req, res) => {
     req.logout((err) => {
@@ -107,6 +125,7 @@ function main() {
       }
     });
   });
+
   //Registration route
   app
     .route("/register")
@@ -114,11 +133,45 @@ function main() {
       res.render("register");
     })
     .post((req, res) => {
-      addToDB((email = req.body.username), (password = req.body.password)).then((saveResult) => {
+      addToUserDB((username = req.body.username), (password = req.body.password)).then((saveResult) => {
         if (saveResult != "True") {
           res.send(saveResult.message);
         } else {
-          res.render("secrets");
+          res.redirect("/secrets");
+        }
+      });
+    });
+
+  //Secrets route
+  app.route("/secrets").get(async (req, res) => {
+    if (req.isAuthenticated()) {
+      let secretsList = [];
+      let secretsTemp = await secretsModel.find();
+      secretsTemp.forEach((element) => {
+        secretsList.push(element.secret);
+      });
+      res.render("secrets", { secrets: secretsList });
+    } else {
+      res.redirect("/login");
+    }
+  });
+
+  //Submit a secret route
+  app
+    .route("/submit")
+    .get((req, res) => {
+      if (req.isAuthenticated()) {
+        res.render("submit");
+      } else {
+        res.redirect("/login");
+      }
+    })
+    .post((req, res) => {
+      addToSecretsDB(req.body.secret).then((result) => {
+        if (result != "True") {
+          res.send(result);
+        } else {
+          res.redirect("/secrets");
         }
       });
     });
@@ -128,7 +181,7 @@ function main() {
   app
     .route("/auth/google/callback")
     .get(passport.authenticate("google", { failureRedirect: "/login" }), function (req, res) {
-      res.render("secrets");
+      res.redirect("/secrets");
     });
 
   app.listen(3000);

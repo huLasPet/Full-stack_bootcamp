@@ -130,6 +130,40 @@ Passport:
             res.render("secrets");
         });
 
+Google OAuth2 - needs Passport too, check the Secrets project for a working example:
+        const GoogleStrategy = require("passport-google-oauth20").Strategy;
+        const findOrCreate = require("mongoose-findorcreate");
+        UserSchema.plugin(findOrCreate);
+        passport.serializeUser(function (user, done) {
+            done(null, user.id);
+            });
+            passport.deserializeUser(function (user, done) {
+            done(null, user);
+            });
+        passport.use(
+            new GoogleStrategy(
+                {
+                clientID: process.env.GOOGLE_CLIENT_ID,
+                clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+                callbackURL: "http://localhost:3000/auth/google/callback",
+                },
+                function (accessToken, refreshToken, profile, cb) {
+                UserModel.findOrCreate({ email: profile.emails[0].value, googleId: profile.id }, function (err, user) {
+                    return cb(err, user);
+                });
+                }
+            )
+        );
+        app.route("/auth/google").get(passport.authenticate("google", { scope: ["profile", "email"] }));
+        app
+            .route("/auth/google/callback")
+            .get(passport.authenticate("google", { failureRedirect: "/login" }), function (req, res) {
+            res.redirect("/secrets");
+        });
+
+
+
+
 
 
 HTML:
