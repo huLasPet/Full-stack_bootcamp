@@ -12,6 +12,9 @@
 11.Run server with nodemon
 
 
+React:
+0. Create a project folder and run: npx create-react-app
+
 
 Express setup with EJS, dotenv, Mongoose + encryption, bcrypt:
 1.Server.js add this:
