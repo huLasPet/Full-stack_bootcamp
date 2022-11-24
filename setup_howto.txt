@@ -14,8 +14,9 @@
 
 React:
 0. Create a project folder and run: npx create-react-app "name_here"
-1. Clean up the folder as it creates a lot of stuff we might not need
+1. Clean up the folder as it creates a lot of stuff we might not need, make sure the root div stays in the html
 2. root.render should have a <div> for the autocomplete to work after setting file to JSX
+3. Put functions into other files - components, need to import react - and those can have .jsx extension
 
 
 Express setup with EJS, dotenv, Mongoose + encryption, bcrypt:
