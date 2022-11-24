@@ -25,8 +25,19 @@ const action = "practice";
 const action2 = "not practice";
 root.render(
   <div>
-    <p>{`Some more template literal ${action} here that overwrites the previous root.render`}</p>
+    <p
+      className="paragraph-test"
+      contentEditable="true"
+      spellCheck="false"
+    >{`Some more template literal ${action} here that overwrites the previous root.render`}</p>
     <p>{`And some other ${action2} here`}</p>
+    <div>
+      <img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyoH8dKqalMtOOTVYbaxN-qZk_cTLOZtiFEg&usqp=CAU"
+        alt=""
+        className="by100"
+      />
+    </div>
   </div>
 );
 console.log(`${test}`);
