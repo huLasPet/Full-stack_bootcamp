@@ -15,6 +15,7 @@
 React:
 0. Create a project folder and run: npx create-react-app "name_here"
 1. Clean up the folder as it creates a lot of stuff we might not need
+2. root.render should have a <div> for the autocomplete to work after setting file to JSX
 
 
 Express setup with EJS, dotenv, Mongoose + encryption, bcrypt:

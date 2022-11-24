@@ -23,6 +23,9 @@ root.render(
 
 const action = "practice";
 const action2 = "not practice";
+const img = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyoH8dKqalMtOOTVYbaxN-qZk_cTLOZtiFEg&usqp=CAU";
+let inlineStyle = { color: "purple", fontSize: 24 };
+
 root.render(
   <div>
     <p
@@ -30,14 +33,16 @@ root.render(
       contentEditable="true"
       spellCheck="false"
     >{`Some more template literal ${action} here that overwrites the previous root.render`}</p>
-    <p>{`And some other ${action2} here`}</p>
+    <p
+      style={inlineStyle}
+    >{`And some other ${action2} here with inline colors using an object that can be changed without changing this part of the code`}</p>
     <div>
       <img
         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyoH8dKqalMtOOTVYbaxN-qZk_cTLOZtiFEg&usqp=CAU"
         alt=""
         className="by100"
       />
+      <img src={img} alt="Can add pictures this way too" />
     </div>
   </div>
 );
-console.log(`${test}`);
