@@ -1,5 +1,5 @@
 .headerDiv {
-  background-color: coral;
+  background-color: orange;
   width: 100%;
   color: white;
   padding-left: 20px;
@@ -8,6 +8,10 @@
 
 body {
   display: contents;
+}
+
+html {
+  background-color: whitesmoke;
 }
 
 body::after {

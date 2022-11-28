@@ -7,7 +7,8 @@ function Note() {
       <div class="col-sm-4">
         <div className="card">
           <div className="card-body">
-            <h4>Notes come here</h4>
+            <h4>Note title comes here</h4>
+            <p>Note text comes here</p>
           </div>
         </div>
       </div>
