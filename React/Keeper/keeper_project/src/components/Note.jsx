@@ -1,20 +1,16 @@
 import React from "react";
 
-function Note() {
-  let notes = [];
-  for (let i = 0; i < 5; i++) {
-    notes.push(
-      <div class="col-sm-4">
-        <div className="card">
-          <div className="card-body">
-            <h4>Note title comes here</h4>
-            <p>Note text comes here</p>
-          </div>
+function Note(props) {
+  return (
+    <div class="col-sm-4">
+      <div className="card">
+        <div className="card-body">
+          <h4>{props.title}</h4>
+          <p>{props.text}</p>
         </div>
       </div>
-    );
-  }
-  return notes;
+    </div>
+  );
 }
 
 export { Note };

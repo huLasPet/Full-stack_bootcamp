@@ -1,9 +1,9 @@
-function Add(prop) {
-  return prop.number1 + prop.number2;
+function Add(props) {
+  return props.number1 + props.number2;
 }
 
-function Subtract(prop) {
-  return prop.number1 - prop.number2;
+function Subtract(props) {
+  return props.number1 - props.number2;
 }
 
 export { Add, Subtract };

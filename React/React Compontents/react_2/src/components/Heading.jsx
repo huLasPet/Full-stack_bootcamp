@@ -1,6 +1,6 @@
 import React from "react";
 
-function Heading(prop) {
+function Heading(props) {
   let greeting;
   let inlineStyle = { color: "red" };
   let time = new Date();
@@ -18,7 +18,7 @@ function Heading(prop) {
 
   return (
     <h1 className="heading" style={inlineStyle}>
-      {greeting} {prop.name}
+      {greeting} {props.name}
     </h1>
   );
 }
