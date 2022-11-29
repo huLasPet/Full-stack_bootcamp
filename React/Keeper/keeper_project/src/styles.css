@@ -24,7 +24,8 @@ body::after {
   display: flex;
 }
 
-.App {
+.App,
+.form {
   width: 100%;
   display: flex;
   flex-wrap: wrap;

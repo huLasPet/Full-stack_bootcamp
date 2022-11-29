@@ -2,7 +2,7 @@ import React from "react";
 
 function Note(props) {
   return (
-    <div className="col-sm-4">
+    <div className="col-sm-3">
       <div className="card">
         <div className="card-body">
           <h4>{props.title}</h4>
