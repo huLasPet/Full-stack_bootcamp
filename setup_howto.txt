@@ -18,6 +18,24 @@ React:
 2. root.render should have a <div> for the autocomplete to work after setting file to JSX
 3. Put functions into other files - components, need to import react - and those can have .jsx extension
 
+React States:
+function App() {
+  let [stateCount, setState] = React.useState(0);
+  function increase() {
+    setState(stateCount + 1);
+  }
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <h1>{stateCount}</h1>
+        <button onClick={increase}>+</button>
+      </header>
+    </div>
+  );
+}
+
 
 Express setup with EJS, dotenv, Mongoose + encryption, bcrypt:
 1.Server.js add this:
