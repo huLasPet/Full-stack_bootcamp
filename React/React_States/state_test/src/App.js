@@ -4,16 +4,21 @@ import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
-  //Display the current time, update automatically every second or can click to update as well
-  //Start with empty stateTime in useState but after 1 second the setTime() is triggered to give it a value
-  let [stateTime, setState] = React.useState();
+  let [stateTime, setState] = React.useState(new Date().toLocaleTimeString());
+  //This is for the manual update with the button
   function setTime() {
     let currentTime = new Date();
     setState(currentTime.toLocaleTimeString());
-    //Use clearInterval() to ensure there is only 1 setInterval is running - stop a memory leak
-    clearInterval();
   }
-  setInterval(setTime, 1000);
+
+  //This is to update every second using the effect hook
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      let currentTime = new Date();
+      setState(currentTime.toLocaleTimeString());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="App">
