@@ -46,3 +46,7 @@ body::after {
   margin: 2%;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 5px;
 }
+
+.card:hover {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 4px 10px;
+}
