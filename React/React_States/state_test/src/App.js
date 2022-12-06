@@ -22,15 +22,23 @@ function App() {
   }, []);
 
   //Display name typed into the form
-  let [fName, setfName] = useState("");
-  let [lName, setlName] = useState("");
+  let [fullName, setFullName] = useState({
+    fName: "",
+    lName: "",
+  });
 
-  function updatefName(event) {
-    setfName(event.target.value);
-  }
-
-  function updatelName(event) {
-    setlName(event.target.value);
+  function updatefullName(event) {
+    if (event.target.name === "fName") {
+      setFullName((fullName) => ({
+        fName: event.target.value,
+        lName: fullName.lName,
+      }));
+    } else {
+      setFullName((fullName) => ({
+        lName: event.target.value,
+        fName: fullName.fName,
+      }));
+    }
   }
 
   return (
@@ -44,11 +52,11 @@ function App() {
 
         <div className="container">
           <h1>
-            Hello {fName} {lName}
+            Hello {fullName.fName} {fullName.lName}
           </h1>
           <form>
-            <input onChange={updatefName} name="fName" placeholder="First Name" />
-            <input onChange={updatelName} name="lName" placeholder="Last Name" />
+            <input onChange={updatefullName} name="fName" placeholder="First Name" value={fullName.fName} />
+            <input onChange={updatefullName} name="lName" placeholder="Last Name" value={fullName.lName} />
             <button>Submit</button>
           </form>
         </div>
