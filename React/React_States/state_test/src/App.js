@@ -26,19 +26,11 @@ function App() {
   let [lName, setlName] = useState("");
 
   function updatefName(event) {
-    if (event.nativeEvent.data === null) {
-      setfName(fName.slice(0, -1));
-    } else {
-      setfName(fName + event.nativeEvent.data);
-    }
+    setfName(event.target.value);
   }
 
   function updatelName(event) {
-    if (event.nativeEvent.data === null) {
-      setlName(lName.slice(0, -1));
-    } else {
-      setlName(lName + event.nativeEvent.data);
-    }
+    setlName(event.target.value);
   }
 
   return (
