@@ -29,15 +29,15 @@ function App() {
 
   function updatefullName(event) {
     if (event.target.name === "fName") {
-      setFullName((fullName) => ({
+      setFullName({
         fName: event.target.value,
         lName: fullName.lName,
-      }));
+      });
     } else {
-      setFullName((fullName) => ({
+      setFullName({
         lName: event.target.value,
         fName: fullName.fName,
-      }));
+      });
     }
   }
 
