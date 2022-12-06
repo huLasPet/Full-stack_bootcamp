@@ -27,16 +27,17 @@ function App() {
     lName: "",
   });
 
-  function updatefullName(event) {
-    if (event.target.name === "fName") {
+  function updateFullName(event) {
+    let { name, value } = event.target;
+    if (name === "fName") {
       setFullName({
-        fName: event.target.value,
+        fName: value,
         lName: fullName.lName,
       });
     } else {
       setFullName({
-        lName: event.target.value,
         fName: fullName.fName,
+        lName: value,
       });
     }
   }
@@ -55,8 +56,8 @@ function App() {
             Hello {fullName.fName} {fullName.lName}
           </h1>
           <form>
-            <input onChange={updatefullName} name="fName" placeholder="First Name" value={fullName.fName} />
-            <input onChange={updatefullName} name="lName" placeholder="Last Name" value={fullName.lName} />
+            <input onChange={updateFullName} name="fName" placeholder="First Name" value={fullName.fName} />
+            <input onChange={updateFullName} name="lName" placeholder="Last Name" value={fullName.lName} />
             <button>Submit</button>
           </form>
         </div>
