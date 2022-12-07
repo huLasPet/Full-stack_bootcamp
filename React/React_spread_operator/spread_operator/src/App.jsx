@@ -2,7 +2,6 @@ import "./App.css";
 import { useState } from "react";
 
 let newText = [];
-let test = ["anyad", "faszat"];
 
 function App() {
   let [text, setText] = useState([]);
@@ -28,8 +27,8 @@ function App() {
       </div>
       <div>
         <ul>
-          {text.map((element) => {
-            return <li>{element}</li>;
+          {text.map((todo) => {
+            return <li>{todo}</li>;
           })}
         </ul>
       </div>
