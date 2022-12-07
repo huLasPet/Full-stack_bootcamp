@@ -57,7 +57,7 @@ function App() {
   }
 
   //Does the same as updateFullName, just shorter
-  //Display works without the ... as well, but creates a new object within the current object each time - not good after a few changes
+  //Display works without the ... as well, but creates a new object within the current object each time - nesting a new object after every change
   //With ... it only changes what is passed as "name" from the input
   function spreadOperatorUpdate(event) {
     let { name, value } = event.target;
