@@ -28,7 +28,7 @@ function App() {
     email: "",
   });
 
-  function updateFullName(event) {
+  function UpdateFullName(event) {
     let { name, value } = event.target;
     if (name === "fName") {
       setFullName({
@@ -51,7 +51,7 @@ function App() {
     }
   }
 
-  function testForm(event) {
+  function TestForm(event) {
     console.log(event.target.fName.value);
     event.preventDefault();
   }
@@ -59,7 +59,7 @@ function App() {
   //Does the same as updateFullName, just shorter
   //Display works without the ... as well, but creates a new object within the current object each time - nesting a new object after every change
   //With ... it only changes what is passed as "name" from the input
-  function spreadOperatorUpdate(event) {
+  function SpreadOperatorUpdate(event) {
     let { name, value } = event.target;
     setFullName({ ...fullName, [name]: value });
   }
@@ -78,10 +78,10 @@ function App() {
             Hello {fullName.fName} {fullName.lName}
           </h1>
           <p>{fullName.email}</p>
-          <form onSubmit={testForm}>
-            <input onChange={spreadOperatorUpdate} name="fName" placeholder="First Name" value={fullName.fName} />
-            <input onChange={spreadOperatorUpdate} name="lName" placeholder="Last Name" value={fullName.lName} />
-            <input onChange={spreadOperatorUpdate} name="email" placeholder="E-mail" value={fullName.email} />
+          <form onSubmit={TestForm}>
+            <input onChange={SpreadOperatorUpdate} name="fName" placeholder="First Name" value={fullName.fName} />
+            <input onChange={SpreadOperatorUpdate} name="lName" placeholder="Last Name" value={fullName.lName} />
+            <input onChange={SpreadOperatorUpdate} name="email" placeholder="E-mail" value={fullName.email} />
             <button>Submit</button>
           </form>
         </div>
