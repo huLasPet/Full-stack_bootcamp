@@ -51,6 +51,19 @@ function App() {
     }
   }
 
+  function testForm(event) {
+    console.log(event.target.fName.value);
+    event.preventDefault();
+  }
+
+  //Does the same as updateFullName, just shorter
+  //Display works without the ... as well, but creates a new object within the current object each time - not good after a few changes
+  //With ... it only changes what is passed as "name" from the input
+  function spreadOperatorUpdate(event) {
+    let { name, value } = event.target;
+    setFullName({ ...fullName, [name]: value });
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -65,10 +78,10 @@ function App() {
             Hello {fullName.fName} {fullName.lName}
           </h1>
           <p>{fullName.email}</p>
-          <form>
-            <input onChange={updateFullName} name="fName" placeholder="First Name" value={fullName.fName} />
-            <input onChange={updateFullName} name="lName" placeholder="Last Name" value={fullName.lName} />
-            <input onChange={updateFullName} name="email" placeholder="E-mail" value={fullName.email} />
+          <form onSubmit={testForm}>
+            <input onChange={spreadOperatorUpdate} name="fName" placeholder="First Name" value={fullName.fName} />
+            <input onChange={spreadOperatorUpdate} name="lName" placeholder="Last Name" value={fullName.lName} />
+            <input onChange={spreadOperatorUpdate} name="email" placeholder="E-mail" value={fullName.email} />
             <button>Submit</button>
           </form>
         </div>
