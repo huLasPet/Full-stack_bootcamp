@@ -25,6 +25,7 @@ function App() {
   let [fullName, setFullName] = useState({
     fName: "",
     lName: "",
+    email: "",
   });
 
   function updateFullName(event) {
@@ -33,11 +34,19 @@ function App() {
       setFullName({
         fName: value,
         lName: fullName.lName,
+        email: fullName.email,
+      });
+    } else if (name === "lName") {
+      setFullName({
+        fName: fullName.fName,
+        lName: value,
+        email: fullName.email,
       });
     } else {
       setFullName({
         fName: fullName.fName,
-        lName: value,
+        lName: fullName.lName,
+        email: value,
       });
     }
   }
@@ -55,9 +64,11 @@ function App() {
           <h1>
             Hello {fullName.fName} {fullName.lName}
           </h1>
+          <p>{fullName.email}</p>
           <form>
             <input onChange={updateFullName} name="fName" placeholder="First Name" value={fullName.fName} />
             <input onChange={updateFullName} name="lName" placeholder="Last Name" value={fullName.lName} />
+            <input onChange={updateFullName} name="email" placeholder="E-mail" value={fullName.email} />
             <button>Submit</button>
           </form>
         </div>
