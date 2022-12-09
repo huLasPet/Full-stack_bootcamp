@@ -8,7 +8,7 @@ function App() {
 
   function ToDoText(event) {
     newText.push(event.target.todo.value);
-    //Spread operator adds all elements from newText instead of adding the whole array as 1 item
+    //Spread operator adds all elements from newText instead of adding the whole array as 1 element inside a []
     setText([...newText]);
     event.preventDefault();
   }
