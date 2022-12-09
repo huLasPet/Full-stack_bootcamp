@@ -8,6 +8,7 @@ function App() {
 
   function ToDoText(event) {
     newText.push(event.target.todo.value);
+    //Spread operator adds all elements from newText instead of adding the whole array as 1 item
     setText([...newText]);
     event.preventDefault();
   }
@@ -27,8 +28,9 @@ function App() {
       </div>
       <div>
         <ul>
-          {text.map((todo) => {
-            return <li>{todo}</li>;
+          {text.map((todo, index) => {
+            //Just using index since proper a proper key doesn't matter here
+            return <li key={index}>{todo}</li>;
           })}
         </ul>
       </div>
