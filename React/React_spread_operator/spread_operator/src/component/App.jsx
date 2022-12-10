@@ -1,16 +1,25 @@
-import "./App.css";
+import "../App.css";
 import { useState } from "react";
+import { DisplayText } from "./Display";
 
 let newText = [];
 
 function App() {
-  let [text, setText] = useState([]);
+  const [text, setText] = useState([]);
 
   function ToDoText(event) {
     newText.push(event.target.todo.value);
     //Spread operator adds all elements from newText instead of adding the whole array as 1 element inside a []
     setText([...newText]);
     event.preventDefault();
+  }
+
+  function DeleteItem(id) {
+    setText((text) => {
+      return text.filter((item, index) => {
+        return index !== id;
+      });
+    });
   }
 
   return (
@@ -25,14 +34,9 @@ function App() {
             <span>Add</span>
           </button>
         </form>
-      </div>
-      <div>
-        <ul>
-          {text.map((todo, index) => {
-            //Just using index since proper a proper key doesn't matter here
-            return <li key={index}>{todo}</li>;
-          })}
-        </ul>
+        {text.map((todo, index) => {
+          return <DisplayText text={todo} DeleteItem={DeleteItem} key={index} id={index} />;
+        })}
       </div>
     </div>
   );
