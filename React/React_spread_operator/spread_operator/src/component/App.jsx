@@ -1,27 +1,10 @@
 import "../App.css";
 import { useState } from "react";
-import { DisplayText } from "./Display";
+import { ToDoItems } from "./ToDoItems";
 import { Input } from "./Input";
-
-let newText = [];
 
 function App() {
   const [text, setText] = useState([]);
-
-  function ToDoText(event) {
-    newText.push(event.target.todo.value);
-    //Spread operator adds all elements from newText instead of adding the whole array as 1 element inside a []
-    setText([...newText]);
-    event.preventDefault();
-  }
-
-  function DeleteItem(id) {
-    setText((text) => {
-      return text.filter((item, index) => {
-        return index !== id;
-      });
-    });
-  }
 
   return (
     <div className="container">
@@ -29,9 +12,13 @@ function App() {
         <h1>To-Do List</h1>
       </div>
       <div className="form">
-        <Input ToDoText={ToDoText} />
+        {/* Input has the input field and the function to add a todo with setText */}
+        <Input text={text} setText={setText} />
+
+        {/* This goes through the text list, passes the todo item and its index to the ToDoItems component which displays it and 
+        also adds a DeleteItem function to it so when it is clicked, it is removed from the list */}
         {text.map((todo, index) => {
-          return <DisplayText text={todo} DeleteItem={DeleteItem} key={index} id={index} />;
+          return <ToDoItems todo={todo} setText={setText} key={index} id={index} />;
         })}
       </div>
     </div>
