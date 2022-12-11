@@ -1,6 +1,7 @@
 import "../App.css";
 import { useState } from "react";
 import { DisplayText } from "./Display";
+import { Input } from "./Input";
 
 let newText = [];
 
@@ -28,12 +29,7 @@ function App() {
         <h1>To-Do List</h1>
       </div>
       <div className="form">
-        <form onSubmit={ToDoText}>
-          <input name="todo" type="text" />
-          <button>
-            <span>Add</span>
-          </button>
-        </form>
+        <Input ToDoText={ToDoText} />
         {text.map((todo, index) => {
           return <DisplayText text={todo} DeleteItem={DeleteItem} key={index} id={index} />;
         })}
