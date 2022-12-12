@@ -8,28 +8,14 @@ import { AddNote } from "./AddNote.js";
 import { DeleteNote } from "./DeleteNote.jsx";
 
 function App() {
-  function NoNotes() {
-    return (
-      <div className="App">
-        <Header />
-        <h3>No note created so far.</h3>
-        <Input notes={notes} add={AddNote} setNotes={setNotes} />
-        <Footer />
-      </div>
-    );
-  }
-
   const [notes, setNotes] = useState([]);
-  // (condition) ? (if true) : (if false)
-  return notes.length !== 0 ? (
+  return (
     <div className="App">
       <Header />
       <Input notes={notes} add={AddNote} setNotes={setNotes} />
       <ShowNotes notes={notes} delete={DeleteNote} setNotes={setNotes} />
       <Footer />
     </div>
-  ) : (
-    NoNotes()
   );
 }
 
