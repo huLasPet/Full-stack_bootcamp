@@ -23,6 +23,7 @@ function Note(props) {
             {props.title}
           </h4>
           <p>{props.text}</p>
+          <button onClick={props.delete}>Delete note </button>
         </div>
       </div>
     </div>
