@@ -57,3 +57,8 @@ body::after {
   margin: auto;
   width: 50%;
 }
+
+.submitButton {
+  background-color: whitesmoke;
+  border: none;
+}

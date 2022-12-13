@@ -1,4 +1,5 @@
 import React from "react";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 
 function Input(props) {
   return (
@@ -16,7 +17,9 @@ function Input(props) {
         <label for="noteText">Note text:</label>
         <textarea class="form-control" name="note" id="noteText" rows="3"></textarea>
       </div>
-      <button className="btn btn-outline-dark btn-sm">Create a note</button>
+      <button className="submitButton" type="submit">
+        <AddBoxIcon />
+      </button>
     </form>
   );
 }

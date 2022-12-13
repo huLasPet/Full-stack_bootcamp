@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function Note(props) {
   const [fontColor, setFontColor] = useState("black");
@@ -23,9 +24,7 @@ function Note(props) {
             {props.title}
           </h4>
           <p>{props.text}</p>
-          <button className="btn btn-outline-danger btn-sm" onClick={props.delete}>
-            Delete note{" "}
-          </button>
+          <DeleteIcon onClick={props.delete} />
         </div>
       </div>
     </div>
